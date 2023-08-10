@@ -1,20 +1,22 @@
 ---
-name: Darwin
-surname: Cubi
+name: Paula
+surname: Rodríguez-García
 date: "`r format(Sys.time(), '%B, %Y')`"
 qualifications: 
-address: Quito, Ecuador
-position: "Data Scientist | Actuary"
-profilepic: FOTO.png
-phone: 0996597844
-email: darwin.cubi@gmail.com
-github: darwinc
-linkedin: Darwin-C-V
-www: darwincubi.rbind.io
+address: Copenhagen, Denmark # ""  # Copenhagen, Denmark
+position: "Senior Bioinformatician  |  Machine Learning  |  Microbiome"
+profilepic: photos/photo1.jpg # "" # photos/photo1.jpg
+phone: (+45) 50226843
+email: p.rodriguezgar@hotmail.com
+# github: darwinc
+linkedin: prodriguezgar
+# www: darwincubi.rbind.io
 header-includes:
   - \setstretch{1.15}
-headcolor: 3B9DE1
+headcolor: 30A190 # 3B9DE1-original # "#0F5096"-3 "#30A190"-1
 output: vitae::awesomecv
+params:
+  data_location: data/cv_data.xlsx # data/CV_Data_Example.xlsx #data/cv_data.xlsx
 ---
 
 
@@ -26,22 +28,23 @@ library(magrittr)
 source("Utils/data_download_funs.R")
 
 CV <- create_CV_object(
-  data_location = "https://docs.google.com/spreadsheets/d/1AN85IIvbcMnGbcOCX3jurB4fMOp_niAUbDBU_zfjFEw/edit?usp=sharing",  
+  data_location = params$data_location,  
   pdf_mode = FALSE
 )
 ```
 
-\vspace*{0.5cm}
+# Profile
 
 ```{r, results='asis'}
-CV %<>% print_text_block("intro") 
+CV %<>% print_profile() 
 ```
 
-# Education
+
+# Experience
 
 ```{r}
 CV$entries_data %>% 
-  filter(section == 'education') %>% 
+  filter(section == 'work_experience') %>% 
   detailed_entries(
     what = institution,
     when = glue::glue("{`start`} - {`end`}"),
@@ -51,11 +54,11 @@ CV$entries_data %>%
   )
 ```
 
-# Employment
+# Education
 
 ```{r}
 CV$entries_data %>% 
-  filter(section == 'industry_positions') %>% 
+  filter(section == 'education') %>% 
   detailed_entries(
     what = institution,
     when = glue::glue("{`start`} - {`end`}"),
