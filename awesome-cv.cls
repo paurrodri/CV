@@ -242,7 +242,7 @@
 %-------------------------------------------------------------------------------
 % Define photo ID
 % Usage: \photo[circle|rectangle,edge|noedge,left|right]{<path-to-image>}
-\newcommand{\photo}[2][circle,edge,left]{%
+\newcommand{\photo}[2][circle,noedge,left]{%
   \def\@photo{#2}
   \@for\tmp:=#1\do{%
     \ifthenelse{\equal{\tmp}{circle} \or \equal{\tmp}{rectangle}}%
@@ -254,7 +254,7 @@
   }%
 }
 \def\@photoshape{circle}
-\def\@photoedge{edge}
+\def\@photoedge{noedge}
 \def\@photoalign{left}
 
 % Define writer's name
@@ -441,11 +441,8 @@
     \setlength{\headerphotowidth}{0cm}
   }{%
     \setlength{\headertextwidth}{0.76\textwidth}
-    \setlength{\headerphotowidth}{0.24\textwidth}
+    \setlength{\headerphotowidth}{0.16\textwidth}
   }%
-  \begin{minipage}[c]{\headerphotowidth}%
-    \ifthenelse{\equal{\@photoalign}{left}}{\raggedright\drawphoto}{}
-  \end{minipage}
   \begin{minipage}[c]{\headertextwidth}
     \ifthenelse{\equal{#1}{L}}{\raggedright}{\ifthenelse{\equal{#1}{R}}{\raggedleft}{\centering}}
     \headerfirstnamestyle{\@firstname}\headerlastnamestyle{{}\acvHeaderNameDelim\@lastname}%
@@ -556,6 +553,9 @@
       {}%
       {\headerquotestyle{\@quote\\}\vspace{\acvHeaderAfterQuoteSkip}}%
   \end{minipage}%
+  \begin{minipage}[c]{\headerphotowidth}%
+    \ifthenelse{\equal{\@photoalign}{left}}{\raggedright\drawphoto}{}
+  \end{minipage}
   \begin{minipage}[c]{\headerphotowidth}%
     \ifthenelse{\equal{\@photoalign}{right}}{\raggedleft\drawphoto}{}
   \end{minipage}
