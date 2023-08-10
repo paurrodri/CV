@@ -26,16 +26,15 @@ create_CV_object <-  function(data_location,
     }
     cv$entries_data  <- read_gsheet(sheet_id = "entries")
     cv$skills        <- read_gsheet(sheet_id = "language_skills")
-    cv$text_blocks   <- read_gsheet(sheet_id = "text_blocks")
-    cv$contact_info  <- read_gsheet(sheet_id = "contact_info")
+    cv$profile     <- read_gsheet(sheet_id = "profile")
     cv$post_info  <- read_gsheet(sheet_id = "post_info")
   } else {
     # Want to go old-school with csvs?
-    cv$entries_data <- readr::read_csv(paste0(data_location, "entries.csv"), skip = 1)
-    cv$skills       <- readr::read_csv(paste0(data_location, "language_skills.csv"), skip = 1)
-    cv$text_blocks  <- readr::read_csv(paste0(data_location, "text_blocks.csv"), skip = 1)
-    cv$contact_info <- readr::read_csv(paste0(data_location, "contact_info.csv"), skip = 1)
-    cv$post_info <- readr::read_csv(paste0(data_location, "post_info.csv"), skip = 1)
+    cv$entries_data <- readxl::read_excel(data_location, sheet = "entries",         skip = 1, col_types = 'text')
+    cv$skills       <- readxl::read_excel(data_location, sheet = "language_skills", skip = 1)
+    cv$profile      <- readxl::read_excel(data_location, sheet = "profile",         skip = 1)
+    cv$post_info    <- readxl::read_excel(data_location, sheet = "post_info",       skip = 1)
+
   }
   
   
@@ -47,7 +46,6 @@ create_CV_object <-  function(data_location,
   }
   
   parse_dates <- function(dates){
-    
     date_month <- stringr::str_extract(dates, "(\\w+|\\d+)(?=(\\s|\\/|-)(20|19)[0-9]{2})")
     date_month[is.na(date_month)] <- "1"
     
@@ -57,6 +55,7 @@ create_CV_object <-  function(data_location,
   
   # Clean up entries dataframe to format we need it for printing
   cv$entries_data %<>%
+    dplyr::filter(include == TRUE) %>% 
     tidyr::unite(
       tidyr::starts_with('description'),
       col = "description_bullets",
@@ -66,8 +65,6 @@ create_CV_object <-  function(data_location,
     dplyr::mutate(description_bullets = as.list(strsplit(description_bullets , "\n- ")) ) %>% 
     dplyr::mutate(
       # description_bullets = ifelse(description_bullets != "", paste0("- ", description_bullets), ""),
-      start = ifelse(start == "NULL", NA, start),
-      end = ifelse(end == "NULL", NA, end),
       start_year = extract_year(start),
       end_year = extract_year(end),
       no_start = is.na(start),
@@ -77,12 +74,15 @@ create_CV_object <-  function(data_location,
       timeline = dplyr::case_when(
         no_start  & no_end  ~ "N/A",
         no_start  & has_end ~ as.character(end),
-        has_start & no_end  ~ paste("Current", "-", start),
-        TRUE                ~ paste(end, "-", start)
+        has_start & no_end  ~ paste(start),
+        TRUE                ~ paste(start, "-", end)
       )
     ) %>%
     dplyr::arrange(desc(parse_dates(end))) %>%
     dplyr::mutate_all(~ ifelse(is.na(.), 'N/A', .))
+  
+  cv$profile %<>% 
+    dplyr::filter(include == TRUE)
   
   cv
 }
@@ -117,10 +117,9 @@ sanitize_links <- function(cv, text){
   list(cv = cv, text = text)
 }
 
-#' @description Prints out text block identified by a given label.
-#' @param label ID of the text block to print as encoded in `label` column of `text_blocks` table.
-print_text_block <- function(cv, label){
-  text_block <- dplyr::filter(cv$text_blocks, loc == label) %>%
+#' @description Prints out the profile section
+print_profile <- function(cv){
+  text_block <- cv$profile %>%
     dplyr::pull(text)
   
   strip_res <- sanitize_links(cv, text_block)
