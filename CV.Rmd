@@ -19,7 +19,6 @@ params:
   data_location: data/cv_data.xlsx # data/CV_Data_Example.xlsx #data/cv_data.xlsx
 ---
 
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 library(vitae)
@@ -34,14 +33,12 @@ CV <- create_CV_object(
 ```
 
 # Profile
-
 ```{r, results='asis'}
 CV %<>% print_profile() 
 ```
 
 
 # Experience
-
 ```{r}
 CV$entries_data %>% 
   filter(section == 'work_experience') %>% 
@@ -55,7 +52,6 @@ CV$entries_data %>%
 ```
 
 # Education
-
 ```{r}
 CV$entries_data %>% 
   filter(section == 'education') %>% 
@@ -68,11 +64,39 @@ CV$entries_data %>%
   )
 ```
 
-# Certifications
+# Publications
+```{r, results='asis', echo=FALSE}
+# purrr::pmap(CV$entries_data %>%
+#        filter(section == 'publication') %>% 
+#        select(title, link),
+#      function(title, link){
+#        string <- glue::glue("[{title}]({link})")
+#    return(cat(string))
+# })
 
+# 
+CV$entries_data %>%
+  filter(section == 'publication') %>%
+  detailed_entries(
+    what = institution,
+    when = glue::glue("{`start`}"),
+    with = title, #glue::glue("[{title}]({link})"),
+    where = loc,
+    why = description_bullets
+  )
+# publications_data <- CV$entries_data %>% 
+#   filter(section == 'publication')
+# 
+# for (i in seq(1, nrow(publications_data))){
+#   publication <- publications_data[i, ]
+#   cat("- [", publication$title, "](", publication$link, ")\n")
+# }
+```
+
+# Certifications
 ```{r}
 CV$entries_data %>% 
-  filter(section == 'courses') %>% 
+  filter(section == 'certification') %>% 
   detailed_entries(
     what = institution,
     when = glue::glue("{`start`}"),
@@ -82,14 +106,21 @@ CV$entries_data %>%
   )
 ```
 
-# Skills
-
-```{r, results='asis'}
-CV %>% print_skill()
+# Volunteering
+```{r}
+CV$entries_data %>% 
+  filter(section == 'volunteering') %>% 
+  detailed_entries(
+    what = institution,
+    when = glue::glue("{`start`}"),
+    with = title,
+    where = loc,
+    why = description_bullets
+  )
 ```
 
-# Blog Medium 
 
+# Skills
 ```{r, results='asis'}
-CV %<>% print_post()
+CV %>% print_skill()
 ```
