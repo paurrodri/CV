@@ -47,3 +47,11 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+.DS_Store
+.gitignore
+
+CV.pdf
+
+data/*
+photos/*
