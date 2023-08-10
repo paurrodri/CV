@@ -27,13 +27,11 @@ create_CV_object <-  function(data_location,
     cv$entries_data  <- read_gsheet(sheet_id = "entries")
     cv$skills        <- read_gsheet(sheet_id = "language_skills")
     cv$profile     <- read_gsheet(sheet_id = "profile")
-    cv$post_info  <- read_gsheet(sheet_id = "post_info")
   } else {
     # Want to go old-school with csvs?
     cv$entries_data <- readxl::read_excel(data_location, sheet = "entries",         skip = 1, col_types = 'text')
     cv$skills       <- readxl::read_excel(data_location, sheet = "language_skills", skip = 1)
     cv$profile      <- readxl::read_excel(data_location, sheet = "profile",         skip = 1)
-    cv$post_info    <- readxl::read_excel(data_location, sheet = "post_info",       skip = 1)
 
   }
   
@@ -56,6 +54,10 @@ create_CV_object <-  function(data_location,
   # Clean up entries dataframe to format we need it for printing
   cv$entries_data %<>%
     dplyr::filter(include == TRUE) %>% 
+    # PRG - remove description bullets from 4 onwards
+    select(-description_4, -description_5, -description_6,
+           -description_7, -description_8, -description_9,
+           -description_10,-description_11,-description_12) %>% 
     tidyr::unite(
       tidyr::starts_with('description'),
       col = "description_bullets",
@@ -64,7 +66,6 @@ create_CV_object <-  function(data_location,
     ) %>%
     dplyr::mutate(description_bullets = as.list(strsplit(description_bullets , "\n- ")) ) %>% 
     dplyr::mutate(
-      # description_bullets = ifelse(description_bullets != "", paste0("- ", description_bullets), ""),
       start_year = extract_year(start),
       end_year = extract_year(end),
       no_start = is.na(start),
@@ -76,13 +77,15 @@ create_CV_object <-  function(data_location,
         no_start  & has_end ~ as.character(end),
         has_start & no_end  ~ paste(start),
         TRUE                ~ paste(start, "-", end)
-      )
+      ),
+      loc = ifelse(is.na(loc), " ", loc),
+      institution = ifelse(is.na(institution), " ", institution)
     ) %>%
     dplyr::arrange(desc(parse_dates(end))) %>%
     dplyr::mutate_all(~ ifelse(is.na(.), 'N/A', .))
   
-  cv$profile %<>% 
-    dplyr::filter(include == TRUE)
+  cv$profile %<>%
+    filter(include == TRUE)
   
   cv
 }
@@ -214,22 +217,22 @@ print_skill <- function(cv){
 #' @description Take a position data frame and the section id desired and prints the section to markdown.
 #' @param section_id ID of the entries section to be printed as encoded by the `section` column of the `entries` table
 print_post<- function(cv, section_id, glue_template = "default"){
-  
+
   if(glue_template == "default"){
     glue_template <- "
-- [{name}]({link})
+- [{title}]({link})
 \n"
   }
-  
-    # cv_post<- cv$post_info %>% 
-    #   glue::glue_data(glue_template) 
-  
+
+    # cv_post<- cv$post_info %>%
+    #   glue::glue_data(glue_template)
+
   # Take entire entries data frame and removes the links in descending order
   # so links for the same position are right next to each other in number.
- 
-  
-  print(glue::glue_data(cv$post_info , glue_template))
-  
+
+
+  print(glue::glue_data(cv, glue_template))
+
   invisible(cv)
 }
 
