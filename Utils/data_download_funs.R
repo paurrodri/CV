@@ -30,7 +30,7 @@ create_CV_object <-  function(data_location,
   } else {
     # Want to go old-school with csvs?
     cv$entries_data <- readxl::read_excel(data_location, sheet = "entries",         skip = 1, col_types = 'text')
-    cv$skills       <- readxl::read_excel(data_location, sheet = "language_skills", skip = 1)
+    cv$skills       <- readxl::read_excel(data_location, sheet = "skills",          skip = 1)
     cv$profile      <- readxl::read_excel(data_location, sheet = "profile",         skip = 1)
 
   }
@@ -121,13 +121,22 @@ sanitize_links <- function(cv, text){
 }
 
 #' @description Prints out the profile section
-print_profile <- function(cv){
+print_profile <- function(cv, bulletpoints = T){
   text_block <- cv$profile %>%
     dplyr::pull(text)
   
   strip_res <- sanitize_links(cv, text_block)
   
+  if (!bulletpoints){
   cat(strip_res$text)
+  }
+  
+  if (bulletpoints){
+    bulletpoints_string <- paste('-', strip_res$text) %>% 
+      stringr::str_replace_all("\\.", ".\n-") %>% 
+      stringr::str_replace(".\n-$", "\\.")
+    cat(bulletpoints_string)
+  }
   
   invisible(strip_res$cv)
 }
@@ -236,3 +245,9 @@ print_post<- function(cv, section_id, glue_template = "default"){
   invisible(cv)
 }
 
+extract_year <- function(dates){
+  date_year <- stringr::str_extract(dates, "(20|19)[0-9]{2}")
+  date_year[is.na(date_year)] <- lubridate::year(lubridate::ymd(Sys.Date())) + 10
+  
+  date_year
+}
