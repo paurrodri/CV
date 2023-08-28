@@ -659,23 +659,59 @@
   \honordatestyle{#4} & \honorpositionstyle{#1}\honortitlestyle{#2} & \honorlocationstyle{#3} \\
 }
 
+%-------------------------------------------------------------------------------
+%                PRG customised
+%-------------------------------------------------------------------------------
+
 % Define an environment for cvskill
-\newenvironment{cvskills}{%
+\newenvironment{cvskills}[1]{%
+  \vspace{\acvSectionContentTopSkip}
+  \vspace{-2.0mm}
+  \begin{center}
+    \setlength\tabcolsep{0pt}
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} #1}
+}{%
+    \end{tabular*}
+  \end{center}
+}
+
+% Define a line of cv information (skill or skill category)
+% Usage: \cvskill{<type>}{<skillset>}
+\newcommand*{\cvskill}[2]{%
+  #1 & #2 \\
+}
+
+% Define a line of cv information (skill or skill category)
+% Usage: \cvskill3{<type>}{<skillset>}{<other>}
+\newcommand*{\cvskilll}[3]{%
+  #1 & #2 & #3 \\
+}
+
+
+%-------------------------------------------------------------------------------
+%                Original
+%-------------------------------------------------------------------------------
+
+% Define an environment for cvskill
+\newenvironment{cvskillsoriginal}{%
   \vspace{\acvSectionContentTopSkip}
   \vspace{-2.0mm}
   \begin{center}
     \setlength\tabcolsep{1ex}
     \setlength{\extrarowheight}{0pt}
-    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} r L{\textwidth * \real{0.9}}}
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} r L{\textwidth * \real{0.9}}} % 0.9
 }{%
     \end{tabular*}
   \end{center}
 }
 % Define a line of cv information(skill)
 % Usage: \cvskill{<type>}{<skillset>}
-\newcommand*{\cvskill}[2]{%
+\newcommand*{\cvskilloriginal}[2]{%
 	\skilltypestyle{#1} & \skillsetstyle{#2} \\
 }
+
+
+%-------------------------------------------------------------------------------
 
 % Define an environment for cvitems(for cventry)
 \newenvironment{cvitems}{%

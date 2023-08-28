@@ -4,11 +4,11 @@ surname: Rodríguez-García
 date: "`r format(Sys.time(), '%B, %Y')`"
 qualifications: 
 address: Copenhagen, Denmark # ""  # Copenhagen, Denmark
-position: "Senior Bioinformatician  |  Machine Learning  |  Microbiome"
+position: "Senior Bioinformatician  |  Machine Learning  |  Microbiome Research" # Multi-Omics
 profilepic: photos/photo1.jpg # "" # photos/photo1.jpg
 phone: (+45) 50226843
 email: p.rodriguezgar@hotmail.com
-# github: darwinc
+# github: paurrodri
 linkedin: prodriguezgar
 # www: darwincubi.rbind.io
 header-includes:
@@ -17,6 +17,11 @@ headcolor: 30A190 # 3B9DE1-original # "#0F5096"-3 "#30A190"-1
 output: vitae::awesomecv
 params:
   data_location: data/cv_data.xlsx # data/CV_Data_Example.xlsx #data/cv_data.xlsx
+  experience: "only-employment" # "only-employment" - "separated" # combined
+  publications: FALSE # FALSE if below TRUE
+  conference_publications: TRUE # FALSE if above TRUE
+  certifications: TRUE
+  volunteering: FALSE
 ---
 
 ```{r setup, include=FALSE}
@@ -34,107 +39,109 @@ CV <- create_CV_object(
 
 # Profile
 ```{r, results='asis'}
-CV %<>% print_profile() 
+CV %>% print_profile(bulletpoints = FALSE) 
 ```
 
-
-# Employment
-```{r}
-CV$entries_data %>% 
-  filter(section == 'work_experience' | section == "internship") %>% 
-  detailed_entries(
-    what = institution,
-    when = glue::glue("{`start`} - {`end`}"),
-    with = title,
-    where = loc,
-    why = description_bullets
-  )
+<!-- # Work experience -->
+```{r, eval=params$experience == "combined", child = glue::glue("sections/Experience_combined.Rmd")}
+```
+```{r, eval=params$experience == "only-employment", child = glue::glue("sections/Employment.Rmd")}
+```
+```{r, eval=params$experience == "separated", child = glue::glue("sections/Employment_internships.Rmd")}
 ```
 
-<!-- # Internships -->
-<!-- ```{r} -->
-<!-- CV$entries_data %>%  -->
-<!--   filter(section == 'internship') %>%  -->
-<!--   detailed_entries( -->
-<!--     what = institution, -->
-<!--     when = glue::glue("{`start`} - {`end`}"), -->
-<!--     with = title, -->
-<!--     where = loc, -->
-<!--     why = description_bullets -->
-<!--   ) -->
-<!-- ``` -->
-
-
-# Education
-```{r}
-CV$entries_data %>% 
-  filter(section == 'education') %>% 
-  detailed_entries(
-    what = institution,
-    when = glue::glue("{`start`} - {`end`}"),
-    with = title,
-    where = loc,
-    why = description_bullets
-  )
+<!-- # Education -->
+```{r, eval=TRUE, child = glue::glue("sections/Education.Rmd")}
 ```
 
-# Publications
-```{r, results='asis', echo=FALSE}
-# purrr::pmap(CV$entries_data %>%
-#        filter(section == 'publication') %>% 
-#        select(title, link),
-#      function(title, link){
-#        string <- glue::glue("[{title}]({link})")
-#    return(cat(string))
-# })
-
-# 
-CV$entries_data %>%
-  filter(section == 'publication') %>%
-  detailed_entries(
-    what = institution,
-    when = glue::glue("{`start`}"),
-    with = title, #glue::glue("[{title}]({link})"),
-    where = loc,
-    why = description_bullets
-  )
-# publications_data <- CV$entries_data %>% 
-#   filter(section == 'publication')
-# 
-# for (i in seq(1, nrow(publications_data))){
-#   publication <- publications_data[i, ]
-#   cat("- [", publication$title, "](", publication$link, ")\n")
-# }
+<!-- # Certifications -->
+```{r, eval=params$certifications, child = glue::glue("sections/Certifications.Rmd")}
 ```
 
-# Certifications
-```{r}
-CV$entries_data %>% 
-  filter(section == 'certification') %>% 
-  detailed_entries(
-    what = institution,
-    when = glue::glue("{`start`}"),
-    with = title,
-    where = loc,
-    why = description_bullets
-  )
+<!-- # Publications  -->
+```{r, eval=params$publications, child = glue::glue("sections/Publications.Rmd")}
 ```
 
-# Volunteering
-```{r}
-CV$entries_data %>% 
-  filter(section == 'volunteering') %>% 
-  detailed_entries(
-    what = institution,
-    when = glue::glue("{`start`}"),
-    with = title,
-    where = loc,
-    why = description_bullets
-  )
+<!-- # Conference presentations and publications -->
+```{r, eval=params$conference_publications, child = glue::glue("sections/Conference_publications.Rmd")}
+```
+
+<!-- # Volunteering -->
+```{r, eval=params$volunteering, child = glue::glue("sections/Volunteering.Rmd")}
 ```
 
 
 # Skills
 ```{r, results='asis'}
-CV %>% print_skill()
+table_cols <- CV$skills$group %>% unique() %>% length()
+
+# CV %>% print_skill()
+
+# \begin{cvskills}{|c|c|c|} % Specify the desired number of columns and their formatting
+#   \cvskill{Languages}{English, French, Spanish}
+#   \cvskill{Technical}{Python, JavaScript, HTML/CSS}
+#   % Add more skills or skill categories as needed
+# \end{cvskills}
+
+  glue_template <- "
+\\cvskill{<<group>>}{<<skills>>}"
+  
+  skills_formatted <- CV$skills %>%
+    mutate(skill = if_else(is.na(details)|details=="", glue::glue("{skill}"), glue::glue("{skill} ({details})"))) %>% 
+    group_by(group) %>% 
+    summarize(skills = glue::glue_collapse(skill, sep = ", ")) 
+  
+  cv_skill <- skills_formatted %>% 
+    glue::glue_data(glue_template, .open = "<<", .close = ">>" ) %>% 
+    paste0(., collapse = '\n')
+  
+  cv_skill_env <- paste0('\n\\begin{cvskills}{|c|c|}\n', cv_skill, '\n\\end{cvskills}\n' , collapse= '\n')
+  
+  cv_skill_env_prg <- "\n\\begin{cvskills}{ll}\n\\textbf{Technical} & \\textbf{Language} \\\\ \n\\cvskill{· Programming (R, Python, Matlab, Bash)}{· English - proficient}\n\\cvskill{· Machine Learning}{· Danish - advanced}\n\\cvskill{· Multi-Omics Integration}{· Spanish - native}\n\\cvskill{· Microbiome Research}{· French - intermediate}\n\\cvskill{· Biostatistics}{}\n\\cvskill{· GitHub}{}\n\\cvskill{· Software Development}{}\n\\cvskill{· High Performance Computing}{}\n\\cvskill{· Scientific Communication with Clients}{}\n\\end{cvskills}\n"
+  
+    # cv_skill_env_prg <- "\n\\begin{cvskills}{lll}\n\\textbf{Technical} & \\textbf{Language} & \\textbf{Personal}\\\\ \n\\cvskilll{· Programming (R, Python, Matlab, Bash)}{· English - proficient}{ · Scientific communication with clients}\n\\cvskilll{· Machine Learning}{· Danish - advanced}{ · Majísima}\n\\cvskilll{· Multi-Omics Integration}{· Spanish - native}{ · Majísima}\n\\cvskilll{· Microbiome Research}{· French - intermediate}{ · Majísima}\n\\cvskilll{· Biostatistics}{}{}\n\\cvskilll{· GitHub}{}{}\n\\cvskilll{· Software Development}{}{}\n\\cvskilll{· High Performance Computing}{}{}\n\\end{cvskills}\n"
+
+  cat(cv_skill_env_prg)
+
+  
+
+
+  # , Machine Learning, Multi-omics Integration, Microbiome Research, Biostatistics, GitHub, Software Development, High Performance Computing, Scientific communication with clients
+  
+  
+  invisible(CV)
+  
+# skill_cv <- "
+# \begin{table}[]
+# \begin{tabular}{llll}
+# \textbf{Technical} & Programming (R, Python, Matlab, Bash) & \textbf{Languages} & English (Professional Prociciency) \\
+#  & Machine Learning                      &  & Spanish (Native)      \\
+#  & Multi-Omics Integration               &  & Danish (Advanced)     \\
+#  & Microbiome Research                   &  & French (Intermediary) \\
+#  & Biostatistics                         &  &                       \\
+#  & High Performance Computing            &  &                       \\
+#  & GitHub                                &  &                       \\
+#  & Software Development                  &  &                       \\
+#  & Scientific Communication with Clients &  &                      
+# \\end{tabular}
+# \\end{table}
+# "
+# cat(skill_cv)
+
+# glue_template <- "
+# \\cvskill{<<group>>}{<<skills>>}"
+# 
+#   skills_formatted <- CV$skills %>%
+#     mutate(skill = if_else(is.na(details)|details=="", glue::glue("{skill}"), glue::glue("{skill} ({details})"))) %>%
+#     group_by(group) %>%
+#     summarize(skills = glue::glue_collapse(skill, sep = ", "))
+# 
+#   cv_skill <- skills_formatted %>%
+#     glue::glue_data(glue_template, .open = "<<", .close = ">>" ) %>%
+#     paste0(., collapse = '\n')
+#   cv_skill_env <- paste0('\n\\begin{cvskills}\n', cv_skill, '\n\\end{cvskills}\n' , collapse= '\n')
+# 
+#    cat(cv_skill_env)
+# 
+# invisible(CV)
 ```
