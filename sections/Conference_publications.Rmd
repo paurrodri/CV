@@ -1,0 +1,22 @@
+---
+title: "Publications"
+author: "PRG"
+output: vitae::awesomecv
+---
+
+# Conference presentations and publications
+```{r}
+CV$entries_data %>%
+  filter(section == 'conference_publication') %>%
+  mutate(year = extract_year(start), .before = start) %>% 
+  arrange(desc(year)) %>% 
+  detailed_entries(
+    what = institution,
+    when = glue::glue("{`start`}"),
+    with = title,
+    where = loc,
+    why = description_bullets,
+    # .protect = FALSE
+  )
+```
+

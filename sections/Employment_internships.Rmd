@@ -1,0 +1,32 @@
+---
+title: "Employment"
+author: "PRG"
+output: vitae::awesomecv
+---
+
+# Employment
+```{r}
+CV$entries_data %>% 
+  filter(section == 'work_experience') %>% 
+  detailed_entries(
+    what = institution,
+    when = glue::glue("{`start`} - {`end`}"),
+    with = title,
+    where = loc,
+    why = description_bullets
+  )
+```
+
+# Internships
+```{r}
+CV$entries_data %>%
+  filter(section == 'internship') %>%
+  detailed_entries(
+    what = institution,
+    when = glue::glue("{`start`} - {`end`}"),
+    with = title,
+    where = loc,
+    why = description_bullets
+  )
+```
+

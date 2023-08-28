@@ -1,0 +1,18 @@
+---
+title: "Certifications"
+author: "PRG"
+output: vitae::awesomecv
+---
+
+# Certifications
+```{r}
+CV$entries_data %>% 
+  filter(section == 'certification') %>% 
+  detailed_entries(
+    what = institution,
+    when = glue::glue("{`start`}"),
+    with = title,
+    where = loc,
+    why = description_bullets
+  )
+```

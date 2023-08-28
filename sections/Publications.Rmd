@@ -1,0 +1,40 @@
+---
+title: "Publications"
+author: "PRG"
+output: vitae::awesomecv
+---
+
+# Publications
+```{r}
+ glue_template <- "
+- [{title}]({link})
+\n"
+
+CV$entries_data %>%
+  filter(section == 'publication') %>%
+  detailed_entries(
+    what = institution,
+    when = glue::glue("{`start`}"),
+    with = title,
+    where = loc,
+    why = glue::glue("{link}"), #description_bullets,
+    # .protect = FALSE
+  )
+# publications_data <- CV$entries_data %>% 
+#   filter(section == 'publication')
+# 
+# for (i in seq(1, nrow(publications_data))){
+#   publication <- publications_data[i, ]
+#   cat("- [", publication$title, "](", publication$link, ")\n")
+# }
+# purrr::pmap(CV$entries_data %>%
+#        filter(section == 'publication') %>% 
+#        select(title, link),
+#      function(title, link){
+#        string <- glue::glue("[{title}]({link})")
+#    return(cat(string))
+# })
+
+# 
+```
+

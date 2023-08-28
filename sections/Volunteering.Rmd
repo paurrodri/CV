@@ -1,0 +1,19 @@
+---
+title: "Volunteering"
+author: "PRG"
+output: vitae::awesomecv
+---
+
+# Volunteering
+```{r}
+CV$entries_data %>% 
+  filter(section == 'volunteering') %>% 
+  detailed_entries(
+    what = institution,
+    when = glue::glue("{`start`}"),
+    with = title,
+    where = loc,
+    why = description_bullets
+  )
+```
+

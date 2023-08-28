@@ -1,0 +1,19 @@
+---
+title: "Education"
+author: "PRG"
+output: vitae::awesomecv
+---
+
+# Education
+```{r}
+CV$entries_data %>% 
+  filter(section == 'education') %>% 
+  detailed_entries(
+    what = institution,
+    when = glue::glue("{`start`} - {`end`}"),
+    with = title,
+    where = loc,
+    why = description_bullets
+  )
+```
+
