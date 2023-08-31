@@ -58,6 +58,7 @@
 \RequirePackage{fancyhdr}
 % Needed to manage colors
 \RequirePackage{xcolor}
+\usepackage{xcolor}
 % Needed to use \ifxetex-\else-\fi statement
 \RequirePackage{ifxetex}
 % Needed to use \if-\then-\else statement
@@ -670,6 +671,7 @@
   \begin{center}
     \setlength\tabcolsep{0pt}
     \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} #1}
+    %% \Large\textcolor{black}{\textbf{#2}} \\ %% does not work
 }{%
     \end{tabular*}
   \end{center}
