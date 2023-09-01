@@ -5,7 +5,7 @@ date: "`r format(Sys.time(), '%B, %Y')`"
 qualifications: 
 address: Copenhagen, Denmark # ""  # Copenhagen, Denmark
 position: "Senior Bioinformatician  |  Machine Learning  |  Microbiome Research" # Multi-Omics
-profilepic: photos/photo1.jpg # "" # photos/photo1.jpg
+profilepic: photos/photo.jpg # "" # photos/photo_white.jpg
 phone: (+45) 50226843
 email: p.rodriguezgar@hotmail.com
 # github: paurrodri
@@ -54,16 +54,16 @@ CV %>% print_profile(bulletpoints = FALSE)
 ```{r, eval=TRUE, child = glue::glue("sections/Education.Rmd")}
 ```
 
-<!-- # Certifications -->
-```{r, eval=params$certifications, child = glue::glue("sections/Certifications.Rmd")}
-```
-
 <!-- # Publications  -->
 ```{r, eval=params$publications, child = glue::glue("sections/Publications.Rmd")}
 ```
 
-<!-- # Conference presentations and publications -->
+<!-- # Presentations and publications -->
 ```{r, eval=params$conference_publications, child = glue::glue("sections/Conference_publications.Rmd")}
+```
+
+<!-- # Certifications -->
+```{r, eval=params$certifications, child = glue::glue("sections/Certifications.Rmd")}
 ```
 
 <!-- # Volunteering -->
@@ -71,33 +71,6 @@ CV %>% print_profile(bulletpoints = FALSE)
 ```
 
 
-# Skills
-```{r, results='asis'}
-table_cols <- CV$skills$group %>% unique() %>% length()
-
-# CV %>% print_skill()
-
-  glue_template <- "
-\\cvskill{<<group>>}{<<skills>>}"
-  
-  skills_formatted <- CV$skills %>%
-    mutate(skill = if_else(is.na(details)|details=="", glue::glue("{skill}"), glue::glue("{skill} ({details})"))) %>% 
-    group_by(group) %>% 
-    summarize(skills = glue::glue_collapse(skill, sep = ", ")) 
-  
-  cv_skill <- skills_formatted %>% 
-    glue::glue_data(glue_template, .open = "<<", .close = ">>" ) %>% 
-    paste0(., collapse = '\n')
-  
-  cv_skill_env <- paste0('\n\\begin{cvskills}{|c|c|}\n', cv_skill, '\n\\end{cvskills}\n' , collapse= '\n')
-  
-  cv_skill_env_prg <- "\n\\begin{cvskills}{p{0.4\\textwidth}p{0.4\\textwidth}}\n\\textcolor{black}{\\textbf{Technical}} & \\textcolor{black}{\\textbf{Language}} \\\\ \n\\cvskill{\\textcolor{black}{·} Programming (R, Python, Matlab, Bash)}{\\textcolor{black}{·} English - proficient}\n\\cvskill{\\textcolor{black}{·} Machine Learning}{\\textcolor{black}{·} Danish - advanced}\n\\cvskill{\\textcolor{black}{·} Multi-Omics Integration}{\\textcolor{black}{·} Spanish - native}\n\\cvskill{\\textcolor{black}{·} Microbiome Research}{\\textcolor{black}{·} French - intermediate}\n\\cvskill{\\textcolor{black}{·} Biostatistics}{}\n\\cvskill{\\textcolor{black}{·} GitHub}{}\n\\cvskill{\\textcolor{black}{·} Software Development}{}\n\\cvskill{\\textcolor{black}{·} High Performance Computing}{}\n\\cvskill{\\textcolor{black}{·} Scientific Communication with Clients}{}\n\\end{cvskills}\n"
-  
-  
-    # cv_skill_env_prg <- "\n\\begin{cvskills}{p{0.4\\textwidth}p{0.4\\textwidth}}\n\\fontsize{10.0pt}{0em}\\bodyfont\\scshape\\color{awesome}{Technical} & \\fontsize{10.0pt}{0em}\\bodyfont\\scshape\\color{awesome}{Languages} \\\\ \n\\cvskill{\\textcolor{black}{·} Programming (R, Python, Matlab, Bash)}{\\textcolor{black}{·} English - proficient}\n\\cvskill{\\textcolor{black}{·} Machine Learning}{\\textcolor{black}{·} Danish - advanced}\n\\cvskill{\\textcolor{black}{·} Multi-Omics Integration}{\\textcolor{black}{·} Spanish - native}\n\\cvskill{\\textcolor{black}{·} Microbiome Research}{\\textcolor{black}{·} French - intermediate}\n\\cvskill{\\textcolor{black}{·} Biostatistics}{}\n\\cvskill{\\textcolor{black}{·} GitHub}{}\n\\cvskill{\\textcolor{black}{·} Software Development}{}\n\\cvskill{\\textcolor{black}{·} High Performance Computing}{}\n\\cvskill{\\textcolor{black}{·} Scientific Communication with Clients}{}\n\\end{cvskills}\n"
-  
-    # cv_skill_env_prg <- "\n\\begin{cvskills}{p{0.33\\textwidth}p{0.33\\textwidth}p{0.33\\textwidth}}\n\\textcolor{black}{\\textbf{Technical}} & \\textcolor{black}{\\textbf{Languages}} & \\textcolor{black}{\\textbf{Personal}}\\\\ \n\\cvskilll{\\textcolor{black}{·} Programming (R, Python, Matlab, Bash)}{\\textcolor{black}{·} English - proficient}{ \\textcolor{black}{·} Scientific communication with clients}\n\\cvskilll{\\textcolor{black}{·} Machine Learning}{\\textcolor{black}{·} Danish - advanced}{ \\textcolor{black}{·} Majísima}\n\\cvskilll{\\textcolor{black}{·} Multi-Omics Integration}{\\textcolor{black}{·} Spanish - native}{ \\textcolor{black}{·} Majísima}\n\\cvskilll{\\textcolor{black}{·} Microbiome Research}{\\textcolor{black}{·} French - intermediate}{ \\textcolor{black}{·} Majísima}\n\\cvskilll{\\textcolor{black}{·} Biostatistics}{}{}\n\\cvskilll{\\textcolor{black}{·} GitHub}{}{}\n\\cvskilll{\\textcolor{black}{·} Software Development}{}{}\n\\cvskilll{\\textcolor{black}{·} High Performance Computing}{}{}\n\\end{cvskills}\n"
-
-  cat(cv_skill_env_prg)
-  invisible(CV)
+<!-- # Skills -->
+```{r, child = glue::glue("sections/Skills.Rmd")}
 ```

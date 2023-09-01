@@ -4,7 +4,7 @@ author: "PRG"
 output: vitae::awesomecv
 ---
 
-# Conference presentations and publications
+# Publications and presentations
 ```{r}
 CV$entries_data %>%
   filter(section == 'conference_publication') %>%
