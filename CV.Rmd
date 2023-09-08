@@ -70,7 +70,6 @@ CV %>% print_profile(bulletpoints = FALSE)
 ```{r, eval=params$volunteering, child = glue::glue("sections/Volunteering.Rmd")}
 ```
 
-
 <!-- # Skills -->
 ```{r, child = glue::glue("sections/Skills.Rmd")}
 ```

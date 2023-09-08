@@ -1,20 +1,23 @@
 ---
-title: "Certifications"
+title: "Skills"
 author: "PRG"
 output: vitae::awesomecv
 ---
 
 # Skills
 ```{r, results='asis'}
+categories <- CV$skills %>% filter(include) %>% select(group) %>% unique() %>% pull()
+
 skill_data <- 
- purrr::map(unique(CV$skills$group) %>% purrr::set_names(),
+ purrr::map(categories %>% purrr::set_names(),
       function(category){
         
     CV$skills %>%
+    filter(include) %>% 
     dplyr::mutate(skill = if_else(is.na(details) | details == "",
                            glue::glue("{skill}"),
                            glue::glue("{skill} - {details}"))) %>% 
-    select(-details) %>% 
+    select(-details, -include) %>% 
       dplyr::filter(group == category) %>% 
       tibble::deframe()
 })
@@ -25,7 +28,8 @@ header_latex <- ifelse(n_cols == 2,
   '\n\\begin{cvskills}{p{0.33\\textwidth}p{0.33\\textwidth}p{0.33\\textwidth}}\n'
   )
 
-header_table <- ifelse(n_cols == 2, paste0('\\textcolor{black}{\\textbf{', names(skill_data)[1], '}} & \\textcolor{black}{\\textbf{', names(skill_data)[2], '}} \\\\ \n'),
+header_table <- ifelse(n_cols == 2,
+                       paste0('\\textcolor{black}{\\textbf{', names(skill_data)[1], '}} & \\textcolor{black}{\\textbf{', names(skill_data)[2], '}} \\\\ \n'),
 paste0('\\textcolor{black}{\\textbf{', names(skill_data)[1], '}} & \\textcolor{black}{\\textbf{', names(skill_data)[2], '}} & \\textcolor{black}{\\textbf{', names(skill_data)[3], '}} \\\\ \n')
 )
 end_latex <- '\n\\end{cvskills}\n'
@@ -40,38 +44,37 @@ skill_env <- paste0(header_latex,
 
 for (i in seq(1, row_number)){
 
-  skill_row <- ifelse(n_cols == 2, 
+  skill_row <- ifelse(n_cols == 2,
+    # 2 cols
     paste0(
-    '\\cvskill{\\textcolor{black}  ',
-    ifelse(class(try(skill_data[[1]][[i]], silent = TRUE)) == "try-error",
-           '- ',
-           paste0('{·} ', skill_data[[1]][[i]])
+    '\\cvskill',
+    ifelse(any(class(try(skill_data[[1]][[i]], silent = TRUE)) == "try-error"),
+           '{}',
+           paste0('{\\textcolor{black}{·} ', skill_data[[1]][[i]], '}')
            ),
-    '}{\\textcolor{black}  ',
-    ifelse(class(try(skill_data[[2]][[i]], silent = TRUE)) == "try-error",
-           '- ',
-           paste0('{·} ', skill_data[[2]][[i]])
+    ifelse(any(class(try(skill_data[[2]][[i]], silent = TRUE)) == "try-error"),
+           '{}',
+           paste0('{\\textcolor{black}{·} ', skill_data[[2]][[i]], '}')
            ),
-    '}\n'),
+    '\n'),
+    # 3 cols
     paste0(
-    '\\cvskill{\\textcolor{black} ',
-    ifelse(class(try(skill_data[[1]][[i]], silent = TRUE)) == "try-error",
-           '- ',
-           paste0('{·} ', skill_data[[1]][[i]])
+    '\\cvskill',
+    ifelse(any(class(try(skill_data[[1]][[i]], silent = TRUE)) == "try-error"),
+           '{}',
+           paste0('{\\textcolor{black}{·} ', skill_data[[1]][[i]], '}')
            ),
-    '}{\\textcolor{black} ',
-    ifelse(class(try(skill_data[[2]][[i]], silent = TRUE)) == "try-error",
-           '- ',
-           paste0('{·} ', skill_data[[2]][[i]])
+    ifelse(any(class(try(skill_data[[2]][[i]], silent = TRUE)) == "try-error"),
+           '{}',
+           paste0('{\\textcolor{black}{·} ', skill_data[[2]][[i]], '}')
            ),
-    '}{\\textcolor{black} ',
-    ifelse(class(try(skill_data[[3]][[i]], silent = TRUE)) == "try-error",
-           '- ',
-           paste0('{·} ', skill_data[[3]][[i]])
+    ifelse(any(class(try(skill_data[[3]][[i]], silent = TRUE)) == "try-error"),
+           '{}',
+           paste0('{\\textcolor{black}{·} ', skill_data[[3]][[i]], '}')
            ),
-    '}\n')
+    '\n')
   )
-  
+
   skill_env <- paste0(skill_env,
                       skill_row)
 }
@@ -83,7 +86,4 @@ skill_env <- paste0(skill_env,
 
 cat(skill_env)
 invisible(CV)
-
-# needs to be redone
-# cv_skill_env_prg <- "\n\\begin{cvskills}{p{0.4\\textwidth}p{0.4\\textwidth}}\n\\textcolor{black}{\\textbf{Technical}} & \\textcolor{black}{\\textbf{Language}} \\\\ \n\\cvskill{\\textcolor{black}{·} Programming - R, Python, Matlab, Bash}{\\textcolor{black}{·} English - proficient}\n\\cvskill{\\textcolor{black}{·} Machine Learning}{\\textcolor{black}{·} Danish - advanced}\n\\cvskill{\\textcolor{black}{·} Multi-Omics Integration}{\\textcolor{black}{·} Spanish - native}\n\\cvskill{\\textcolor{black}{·} Microbiome Research}{\\textcolor{black}{·} French - intermediate}\n\\cvskill{\\textcolor{black}{·} Biostatistics}{}\n\\cvskill{\\textcolor{black}{·} GitHub}{}\n\\cvskill{\\textcolor{black}{·} Software Development}{}\n\\cvskill{\\textcolor{black}{·} High Performance Computing}{}\n\\cvskill{\\textcolor{black}{·} Scientific Communication with Clients}{}\n\\end{cvskills}\n"
 ```
