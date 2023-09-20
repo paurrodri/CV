@@ -396,8 +396,8 @@
 \newcommand{\acvHeaderAfterQuoteSkip}{5mm}
 
 % Others
-\newcommand{\acvSectionTopSkip}{3mm}
-\newcommand{\acvSectionContentTopSkip}{2.5mm}
+\newcommand{\acvSectionTopSkip}{3.0mm} % space between last bullet point in section and next section header
+\newcommand{\acvSectionContentTopSkip}{1.5mm} % space between section header and first point in section
 
 
 %-------------------------------------------------------------------------------
@@ -727,6 +727,8 @@
   \end{justify}
   \vspace{-4.0mm}
 }
+
+\setlist[itemize]{leftmargin=*}
 
 
 %-------------------------------------------------------------------------------
