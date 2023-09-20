@@ -7,13 +7,14 @@ output: vitae::awesomecv
 # Education
 ```{r}
 CV$entries_data %>% 
-  filter(section == 'education') %>% 
+  filter(section == 'education') %>%
   detailed_entries(
     what = institution,
     when = glue::glue("{`start`} - {`end`}"),
     with = title,
     where = loc,
-    why = description_bullets
+    why = description_bullets,
+    .protect = FALSE
   )
 ```
 

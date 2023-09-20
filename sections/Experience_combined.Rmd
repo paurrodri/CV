@@ -13,7 +13,8 @@ CV$entries_data %>%
     when = glue::glue("{`start`} - {`end`}"),
     with = title,
     where = loc,
-    why = description_bullets
+    why = description_bullets,
+    .protect = FALSE
   )
 ```
 

@@ -10,10 +10,11 @@ CV$entries_data %>%
   filter(section == 'volunteering') %>% 
   detailed_entries(
     what = institution,
-    when = glue::glue("{`start`}"),
+    when = glue::glue("{`start`} - {`end`}"),
     with = title,
     where = loc,
     why = description_bullets
+    # .protect = FALSE
   )
 ```
 

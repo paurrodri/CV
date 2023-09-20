@@ -16,7 +16,7 @@ CV$entries_data %>%
     with = title,
     where = loc,
     why = description_bullets,
-    # .protect = FALSE
+    .protect = FALSE
   )
 ```
 
