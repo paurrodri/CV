@@ -24,13 +24,13 @@ skill_data <-
 
 n_cols <- length(skill_data)
 header_latex <- ifelse(n_cols == 2,
-  '\n\\begin{cvskills}{p{0.4\\textwidth}p{0.4\\textwidth}}\n',
-  '\n\\begin{cvskills}{p{0.33\\textwidth}p{0.33\\textwidth}p{0.33\\textwidth}}\n'
+  '\n\\vspace{\\acvSectionTopSkip}\n\\begin{cvskills}{p{0.4\\textwidth}p{0.4\\textwidth}}\n',
+  '\n\vspace{\\acvSectionTopSkip}\n\\begin{cvskills}{p{0.33\\textwidth}p{0.33\\textwidth}p{0.33\\textwidth}}\n'
   )
 
 header_table <- ifelse(n_cols == 2,
-                       paste0('\\textcolor{black}{\\textbf{', names(skill_data)[1], '}} & \\textcolor{black}{\\textbf{', names(skill_data)[2], '}} \\\\ \n'),
-paste0('\\textcolor{black}{\\textbf{', names(skill_data)[1], '}} & \\textcolor{black}{\\textbf{', names(skill_data)[2], '}} & \\textcolor{black}{\\textbf{', names(skill_data)[3], '}} \\\\ \n')
+                       paste0('\\textcolor{darktext}{\\textbf{', names(skill_data)[1], '}} & \\textcolor{darktext}{\\textbf{', names(skill_data)[2], '}} \\\\ \n'),
+paste0('\\textcolor{darktext}{\\textbf{', names(skill_data)[1], '}} & \\textcolor{darktext}{\\textbf{', names(skill_data)[2], '}} & \\textcolor{darktext}{\\textbf{', names(skill_data)[3], '}} \\\\ \n')
 )
 end_latex <- '\n\\end{cvskills}\n'
 
