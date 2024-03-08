@@ -12,11 +12,11 @@ email: p.rodriguezgar@hotmail.com
 linkedin: prodriguezgar
 # www: darwincubi.rbind.io
 header-includes:
-  - \setstretch{1.15} #1.15
+  - \setstretch{1.10} #1.15
 headcolor: 0F5096 # 3B9DE1-original # "#0F5096"-3 "#30A190"-1
 output: vitae::awesomecv
 params:
-  data_location: data/cv_data.xlsx # data/CV_Data_Example.xlsx #data/cv_data.xlsx
+  data_location: data/cv_data.xlsx # data/CV_Data_Example.xlsx # data/cv_data.xlsx
   experience: "only-employment" # "only-employment" # "separated" # "combined"
   publications: FALSE # FALSE if below TRUE
   conference_publications: TRUE # FALSE if above TRUE

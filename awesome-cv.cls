@@ -119,6 +119,10 @@
 % Enable if you want to make header or footer using fancyhdr
 \pagestyle{fancy}
 
+% No header with its content on the next page
+\widowpenalty=10000000
+\clubpenalty=10000
+
 
 %-------------------------------------------------------------------------------
 %                Configuration for colors
@@ -195,7 +199,7 @@
 \newcommand*{\headerfirstnamestyle}[1]{{\fontsize{32pt}{1em}\headerfontlight\color{graytext} #1}}
 \newcommand*{\headerlastnamestyle}[1]{{\fontsize{32pt}{1em}\headerfont\bfseries\color{text} #1}}
 \newcommand*{\headerpositionstyle}[1]{{\fontsize{10.0pt}{1em}\bodyfont\scshape\color{awesome} #1}}
-\newcommand*{\headeraddressstyle}[1]{{\fontsize{7pt}{1em}\headerfont\itshape\color{lighttext} #1}}
+\newcommand*{\headeraddressstyle}[1]{{\fontsize{8pt}{1em}\headerfont\itshape\color{lighttext} #1}}
 \newcommand*{\headersocialstyle}[1]{{\fontsize{10.0pt}{1em}\headerfont\color{text} #1}}
 \newcommand*{\headerquotestyle}[1]{{\fontsize{9pt}{1em}\bodyfont\itshape\color{darktext} #1}}
 \newcommand*{\footerstyle}[1]{{\fontsize{8pt}{1em}\footerfont\scshape\color{lighttext} #1}}
@@ -397,7 +401,7 @@
 
 % Others
 \newcommand{\acvSectionTopSkip}{3.0mm} % space between last bullet point in section and next section header
-\newcommand{\acvSectionContentTopSkip}{1.5mm} % space between section header and first point in section
+\newcommand{\acvSectionContentTopSkip}{1.5mm}{\nopagebreak} % space between section header and first point in section
 
 
 %-------------------------------------------------------------------------------
