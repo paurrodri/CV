@@ -16,12 +16,13 @@ header-includes:
 headcolor: 0F5096 # 3B9DE1-original # "#0F5096"-3 "#30A190"-1
 output: vitae::awesomecv
 params:
-  data_location: data/cv_data.xlsx # data/CV_Data_Example.xlsx # data/cv_data.xlsx
+  data_location: data/cv_data_2024_07_refs.xlsx # data/CV_Data_Example.xlsx # data/cv_data.xlsx
   experience: "only-employment" # "only-employment" # "separated" # "combined"
   publications: FALSE # FALSE if below TRUE
   conference_publications: TRUE # FALSE if above TRUE
   certifications: TRUE
   volunteering: FALSE 
+  references: FALSE
 ---
 
 ```{r setup, include=FALSE}
@@ -72,4 +73,8 @@ CV %>% print_profile(bulletpoints = TRUE)
 
 <!-- # Skills -->
 ```{r, child = glue::glue("sections/Skills.Rmd")}
+```
+
+<!-- # References -->
+```{r, eval=params$references, child = glue::glue("sections/References.Rmd")}
 ```

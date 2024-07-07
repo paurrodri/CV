@@ -1,0 +1,40 @@
+---
+title: "References"
+author: "PRG"
+output: vitae::awesomecv
+---
+
+# Reference contacts
+```{r, results='asis'}
+refs <- CV$references %>% 
+  filter(include) %>% 
+  mutate(string = glue::glue("{name} ({position}, {institution}): {email}")) %>% 
+  select(string)
+
+header_latex <- '\n'
+end_latex    <- '\n'
+
+
+ref_env <- paste0(header_latex)
+for (i in seq(1, nrow(refs))){
+
+  ref_row <- paste0(
+    ifelse(any(class(try(refs$string[[i]], silent = TRUE)) == "try-error"),
+           '{}',
+           paste0('\\textcolor{black}{·} ', refs$string[[i]])
+           # paste0(refs$string[[i]])
+           ),
+    '\n')
+
+  ref_env <- paste0(ref_env,
+                      ref_row)
+}
+
+
+ref_env <- paste0(ref_env,
+                  end_latex)
+
+
+cat(ref_env)
+invisible(CV)
+```
