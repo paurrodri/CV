@@ -4,14 +4,15 @@ surname: Rodríguez-García
 date: "`r format(Sys.time(), '%B, %Y')`"
 qualifications: 
 address: Copenhagen, Denmark
-position: "Senior Bioinformatician  |  Microbiome Research | Multi-omics"
+position: "Senior Bioinformatician  |  Microbiome Research | Multi-Omics Integration"
 profilepic: photos/photo_2.jpg
-phone: (+45) 50226843
+phone: (+45) 11111111
 email: p.rodriguezgar@hotmail.com
-github: paurrodri
+# github: paurrodri
 linkedin: prodriguezgar
-  header-includes:
-  - \setstretch{1.10} #1.15
+# www: ""
+header-includes:
+  - \setstretch{1.15} #1.15
 headcolor: 0F5096 # 3B9DE1-original # "#0F5096"-3 "#30A190"-1
 output: vitae::awesomecv
 params:
