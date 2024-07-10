@@ -3,20 +3,19 @@ name: Paula
 surname: Rodríguez-García
 date: "`r format(Sys.time(), '%B, %Y')`"
 qualifications: 
-address: Copenhagen, Denmark # ""  # Copenhagen, Denmark
-position: "Senior Bioinformatician  |  Machine Learning  |  Microbiome Research" # Multi-Omics
-profilepic: photos/photo_2.jpg # "" # photos/photo_white.jpg
+address: Copenhagen, Denmark
+position: "Senior Bioinformatician  |  Microbiome Research | Multi-omics"
+profilepic: photos/photo_2.jpg
 phone: (+45) 50226843
 email: p.rodriguezgar@hotmail.com
-# github: paurrodri
+github: paurrodri
 linkedin: prodriguezgar
-# www: darwincubi.rbind.io
-header-includes:
+  header-includes:
   - \setstretch{1.10} #1.15
 headcolor: 0F5096 # 3B9DE1-original # "#0F5096"-3 "#30A190"-1
 output: vitae::awesomecv
 params:
-  data_location: data/cv_data_2024_07_refs.xlsx # data/CV_Data_Example.xlsx # data/cv_data.xlsx
+  data_location: data/cv_data.xlsx
   experience: "only-employment" # "only-employment" # "separated" # "combined"
   publications: FALSE # FALSE if below TRUE
   conference_publications: TRUE # FALSE if above TRUE
