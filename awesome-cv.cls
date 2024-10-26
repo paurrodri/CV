@@ -400,7 +400,7 @@
 \newcommand{\acvHeaderAfterQuoteSkip}{5mm}
 
 % Others
-\newcommand{\acvSectionTopSkip}{3.0mm} % space between last bullet point in section and next section header
+\newcommand{\acvSectionTopSkip}{3.0mm} % space between last bullet point in section and next section header prev 3.0
 \newcommand{\acvSectionContentTopSkip}{1.5mm}{\nopagebreak} % space between section header and first point in section
 
 
@@ -594,7 +594,7 @@
 % Define a paragraph for CV
 \newenvironment{cvparagraph}{%
   \vspace{\acvSectionContentTopSkip}
-  \vspace{-3mm}
+  \vspace{-3mm} % prev -3mm
   \paragraphstyle
 }{%
   \par
@@ -611,7 +611,7 @@
 % Define an entry of cv information
 % Usage: \cventry{<position>}{<title>}{<date>}{<location>}{<description>}
 \newcommand*{\cventry}[5]{
-%  \vspace{-2.0mm}
+ % \vspace{-2.0mm}
   \setlength\tabcolsep{0pt}%
   \setlength{\extrarowheight}{0pt}%
   \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{\textwidth - 4.5cm} R{4.5cm}}%
@@ -729,7 +729,7 @@
 }{%
   \end{itemize}
   \end{justify}
-  \vspace{-4.0mm}
+  \vspace{1.0mm} % prev -4mm
 }
 
 \setlist[itemize]{leftmargin=*}

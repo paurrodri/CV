@@ -12,8 +12,8 @@ email: p.rodriguezgar@hotmail.com
 linkedin: prodriguezgar
 # www: ""
 header-includes:
-  - \setstretch{1.15} #1.15
-headcolor: 0F5096 # 3B9DE1-original # "#0F5096"-3 "#30A190"-1
+  - \setstretch{1.15}
+headcolor: "0F5096" # 3B9DE1-original # "#0F5096"-3 "#30A190"-1
 output: vitae::awesomecv
 params:
   data_location: data/cv_data.xlsx
